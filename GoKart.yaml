@@ -1,0 +1,52 @@
+# Self-Driving Go-Kart - ML-Agents Training Configuration
+# Author: Shubham Sharma
+# Algorithm: Proximal Policy Optimization (PPO)
+
+behaviors:
+  GoKartAgent:
+    trainer_type: ppo
+
+    hyperparameters:
+      # Learning rate for neural network optimization
+      learning_rate: 3.0e-4
+      learning_rate_schedule: linear
+
+      # Batch and buffer sizes for experience replay
+      batch_size: 128
+      buffer_size: 2048
+
+      # PPO-specific parameters
+      beta: 5.0e-3           # Entropy regularization (exploration)
+      epsilon: 0.2           # PPO clipping parameter
+      lambd: 0.95            # GAE lambda for advantage estimation
+      num_epoch: 3           # Number of passes through buffer
+
+    network_settings:
+      normalize: true        # Normalize observations
+      hidden_units: 256      # Neurons per hidden layer
+      num_layers: 2          # Number of hidden layers
+      vis_encode_type: simple
+
+    reward_signals:
+      extrinsic:
+        gamma: 0.99          # Discount factor for future rewards
+        strength: 1.0
+
+      # Curiosity-driven exploration (optional)
+      curiosity:
+        gamma: 0.99
+        strength: 0.02
+        encoding_size: 256
+        learning_rate: 3.0e-4
+
+    # Training duration
+    max_steps: 500000        # Total training steps
+    time_horizon: 64         # Steps before updating policy
+    summary_freq: 5000       # Log frequency
+    keep_checkpoints: 5      # Number of model checkpoints to keep
+
+    # Behavioral cloning (optional - for imitation learning)
+    # behavioral_cloning:
+    #   demo_path: ./demos/GoKart.demo
+    #   strength: 0.5
+    #   steps: 150000
